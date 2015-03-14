@@ -1,0 +1,1 @@
+char HTTP_CheckResult(uint8_t sHTTPResult[]);
