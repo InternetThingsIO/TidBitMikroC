@@ -35,15 +35,13 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=8
-File0=TScript\TScriptCommon.h
-File1=HTTP\HTTP_Creator.c
-File2=CC3000\CC3000_Driver.c
-File3=IrisHub.c
-File4=IrisPIC32.c
-File5=TScript\TScriptEngine.c
-File6=ST7735R\st7735r.h
-File7=TScript\TScriptActions.c
+Count=6
+File0=IrisHub.c
+File1=IrisPIC32.c
+File2=..\..\..\..\..\Documents\iris_pic32\HTTP\HTTP_Creator.c
+File3=..\..\..\..\..\Documents\iris_pic32\ST7735R\st7735r.h
+File4=..\..\..\..\..\Documents\iris_pic32\WS2812b\WS2812B.c
+File5=..\..\..\..\..\Documents\iris_pic32\ST7735R\ST7735R.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -51,24 +49,36 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=9
+Count=15
 Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\defs\
 Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\uses\
-Path2=C:\Users\george\OneDrive\Documents\iris_pic32\
-Path3=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Network_WiFi_PIC32\Uses\
-Path4=C:\Users\george\OneDrive\Documents\iris_pic32\WS2812b\
-Path5=C:\Users\george\OneDrive\Documents\iris_pic32\ST7735R\
-Path6=C:\Users\george\OneDrive\Documents\iris_pic32\CC3000\
-Path7=C:\Users\george\OneDrive\Documents\iris_pic32\HTTP\
-Path8=C:\Users\george\OneDrive\Documents\iris_pic32\TScript\
+Path2=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\
+Path3=C:\Users\george\OneDrive\Documents\iris_pic32\
+Path4=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Network_WiFi_PIC32\Uses\
+Path5=C:\Users\george\OneDrive\Documents\iris_pic32\WS2812b\
+Path6=C:\Users\george\OneDrive\Documents\iris_pic32\ST7735R\
+Path7=C:\Users\george\OneDrive\Documents\iris_pic32\CC3000\
+Path8=C:\Users\george\OneDrive\Documents\iris_pic32\HTTP\
+Path9=C:\Users\george\OneDrive\Documents\iris_pic32\TScript\
+Path10=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\WS2812b\
+Path11=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\ST7735R\
+Path12=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\HTTP\
+Path13=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\CC3000\
+Path14=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\TScript\
 [HEADER_PATH]
-Count=6
+Count=12
 Path0=C:\Users\george\OneDrive\Documents\iris_pic32\WS2812b\
 Path1=C:\Users\george\OneDrive\Documents\iris_pic32\ST7735R\
 Path2=C:\Users\george\OneDrive\Documents\iris_pic32\CC3000\
 Path3=C:\Users\george\OneDrive\Documents\iris_pic32\
 Path4=C:\Users\george\OneDrive\Documents\iris_pic32\HTTP\
 Path5=C:\Users\george\OneDrive\Documents\iris_pic32\TScript\
+Path6=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\WS2812b\
+Path7=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\ST7735R\
+Path8=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\CC3000\
+Path9=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\
+Path10=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\HTTP\
+Path11=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\TScript\
 [HEADERS]
 Count=14
 File0=WS2812b\WS2812b.h

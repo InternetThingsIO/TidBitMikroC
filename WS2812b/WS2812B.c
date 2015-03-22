@@ -78,34 +78,35 @@ void WS2812b_init(){
          aBlue[i] = 0;
      }
 
-     /*
-     for (i=0; i<LED_STRIP_LEN; i++){
+
+/*for (i=0; i<LED_STRIP_LEN; i++){
          if (i%3 == 0)
             dRed[i] = 64;
          else
              dRed[i] = 0;
-             
+
          if ((i+1)%3 == 0)
             dGreen[i] = 64;
          else
              dGreen[i] = 0;
-        
+
          if ((i+2)%3 == 0)
            dBlue[i] = 64;
          else
            dBlue[i] = 0;
-         
+
          aRed[i] = 0;
          aGreen[i] = 0;
          aBlue[i] = 0;
-     }
-     */
+     }*/
+     
+
      
      RAMP_AMOUNT = 1;
      
      //init timer
-     timerIterations = 0;
-     InitTimer2();
+     //timerIterations = 0;
+     //InitTimer2();
      
      updateEnabled = TRUE;
 }
