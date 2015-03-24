@@ -38,10 +38,10 @@ ActiveImageIndex=-1
 Count=6
 File0=IrisHub.c
 File1=IrisPIC32.c
-File2=..\..\..\..\..\Documents\iris_pic32\HTTP\HTTP_Creator.c
-File3=..\..\..\..\..\Documents\iris_pic32\ST7735R\st7735r.h
-File4=..\..\..\..\..\Documents\iris_pic32\WS2812b\WS2812B.c
-File5=..\..\..\..\..\Documents\iris_pic32\ST7735R\ST7735R.c
+File2=..\..\..\..\..\Documents\iris_pic32\ST7735R\st7735r.h
+File3=..\..\..\..\..\Documents\iris_pic32\ST7735R\ST7735R.c
+File4=HTTP\HTTP_Creator.c
+File5=WS2812b\WS2812B.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

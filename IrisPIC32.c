@@ -4,7 +4,7 @@
 
 #define LED_STRIP_LEN 36
 
-unsigned long timerIterations;
+unsigned long timerIterations2;
 
 void main() {
      int i;
@@ -24,11 +24,6 @@ void main() {
      WS2812b_setColorRange(0,35, 32,32,32);
      
      while(1){
-       timerIterations++;
-      //makes this execute ~20hz
-      if (timerIterations > 13){
-          WS2812b_Update();
-          timerIterations = 0;
-      }
+         WS2812b_Update();
      }
 }
