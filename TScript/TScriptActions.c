@@ -8,6 +8,7 @@
 #include "stdint.h"
 #include "UART_Ext.h"
 #include "TScriptCommon.h"
+#include "SDCard.h"
 
 const uint8_t RED = 0;
 const uint8_t GREEN = 1;
@@ -19,10 +20,23 @@ void ddelay_ms(unsigned int time);
 //must be called first
 //initializes any devices available for the action scripts
 void TAction_InitDevices(){
-    //init LCD
-    writeShort(ST7735R_Init());
-    //init WS2812B
-    WS2812b_init();
+
+     //set pins to output for SPI2 / LCD
+     //SCK2
+     TRISG.RG6 = 0; //hooked
+     //SDO2
+     TRISG.RG8 = 0; //hooked
+     //RESET
+     TRISE.RE3 = 0; //hooked
+     //D/C
+     TRISB.RB15 = 0; //hooked
+
+     //init SD Card
+     SDCard_init();
+     //init LCD
+     //writeShort(ST7735R_Init());
+     //init WS2812B
+     WS2812b_init();
 }
 
 void TAction_empty(SingleCommand *pCommand){

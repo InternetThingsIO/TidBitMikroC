@@ -16,34 +16,33 @@ Value=2000
 [EEPROM_DEFINITION]
 Value=
 [FILES]
-Count=12
+Count=10
 File0=IrisPIC32.c
 File1=WS2812b\WS2812B.c
 File2=ST7735R\ST7735R.c
 File3=ST7735R\LEDLight.c
-File4=UART_Ext.c
-File5=HTTP\HTTP_Interpreter.c
-File6=HTTP\HTTP_Creator.c
-File7=CC3000\CC3000_Driver.c
-File8=IrisHub.c
-File9=HTTP\JSON.c
-File10=TScript\TScriptActions.c
-File11=TScript\TScriptEngine.c
+File4=IrisHub.c
+File5=HTTP\JSON.c
+File6=TScript\TScriptActions.c
+File7=TScript\TScriptEngine.c
+File8=SDCard.c
+File9=UART_Ext.c
 [BINARIES]
 Count=0
 [IMAGES]
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=8
-File0=TScript\TScriptCommon.h
-File1=HTTP\HTTP_Creator.c
-File2=CC3000\CC3000_Driver.c
-File3=IrisHub.c
-File4=IrisPIC32.c
-File5=TScript\TScriptEngine.c
-File6=ST7735R\st7735r.h
-File7=TScript\TScriptActions.c
+Count=9
+File0=IrisPIC32.c
+File1=IrisHub.c
+File2=..\..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\include\stdint.h
+File3=TScript\TScriptActions.c
+File4=WS2812b\WS2812B.c
+File5=SDCard.c
+File6=TScript\TScriptEngine.c
+File7=WS2812b\WS2812b.h
+File8=ST7735R\ST7735R.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -51,54 +50,54 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=9
+Count=10
 Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\defs\
 Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\uses\
-Path2=C:\Users\george\OneDrive\Documents\iris_pic32\
+Path2=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\
 Path3=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\Packages\Network_WiFi_PIC32\Uses\
-Path4=C:\Users\george\OneDrive\Documents\iris_pic32\WS2812b\
-Path5=C:\Users\george\OneDrive\Documents\iris_pic32\ST7735R\
-Path6=C:\Users\george\OneDrive\Documents\iris_pic32\CC3000\
-Path7=C:\Users\george\OneDrive\Documents\iris_pic32\HTTP\
-Path8=C:\Users\george\OneDrive\Documents\iris_pic32\TScript\
+Path4=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\WS2812b\
+Path5=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\ST7735R\
+Path6=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\HTTP\
+Path7=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\CC3000\
+Path8=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\TScript\
+Path9=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\include\
 [HEADER_PATH]
-Count=6
-Path0=C:\Users\george\OneDrive\Documents\iris_pic32\WS2812b\
-Path1=C:\Users\george\OneDrive\Documents\iris_pic32\ST7735R\
-Path2=C:\Users\george\OneDrive\Documents\iris_pic32\CC3000\
-Path3=C:\Users\george\OneDrive\Documents\iris_pic32\
-Path4=C:\Users\george\OneDrive\Documents\iris_pic32\HTTP\
-Path5=C:\Users\george\OneDrive\Documents\iris_pic32\TScript\
+Count=8
+Path0=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\WS2812b\
+Path1=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\ST7735R\
+Path2=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\CC3000\
+Path3=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\
+Path4=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\HTTP\
+Path5=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\TScript\
+Path6=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\include\
+Path7=C:\Users\george\OneDrive\George's Stuff\critical\TidBit\gitrepos\TidBitPic\
 [HEADERS]
-Count=14
+Count=12
 File0=WS2812b\WS2812b.h
 File1=ST7735R\ST7735R.h
 File2=ST7735R\font.h
 File3=ST7735R\LEDLight.h
-File4=CC3000\__Net_Wireless_CC3000_PIC32.h
-File5=UART_Ext.h
-File6=HTTP\HTTP_Creator.h
-File7=CC3000\CC3000_Driver.h
-File8=HTTP\HTTP_Interpreter.h
-File9=IrisHub.h
-File10=HTTP\JSON.h
-File11=TScript\TScriptEngine.h
-File12=TScript\TScriptActions.h
-File13=TScript\TScriptCommon.h
+File4=IrisHub.h
+File5=HTTP\JSON.h
+File6=TScript\TScriptEngine.h
+File7=TScript\TScriptActions.h
+File8=TScript\TScriptCommon.h
+File9=SDCard.h
+File10=UART_Ext.h
+File11=SCCard.h
 [PLDS]
 Count=0
 [Useses]
-Count=10
-File0=Net_Wireless_CC3000
-File1=UART
-File2=C_String
-File3=Conversions
-File4=SPI
-File5=Mmc_FAT16
-File6=Mmc_Fat16_Config
-File7=C_Type
-File8=Mmc
-File9=C_Stdlib
+Count=9
+File0=UART
+File1=C_String
+File2=Conversions
+File3=SPI
+File4=Mmc_FAT16
+File5=Mmc_Fat16_Config
+File6=C_Type
+File7=Mmc
+File8=C_Stdlib
 [INTERRUPT_DEFS]
 EBASE=9FC01000
 VECTOR_SPACEING=32

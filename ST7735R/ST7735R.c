@@ -2,6 +2,7 @@
 #include "ST7735R.h"
 #include "font.h"
 #include "UART_Ext.h"
+//#include "SDCard.h"
 ////#include "MDD File System/SD-SPI.h"
 
 #define LCD_RESET   LATE.RE3 //hooked
@@ -9,10 +10,6 @@
 #define LCD_RS      LATB.RB15 //hooked to DC
 #define SD_CS       LATE.RE0 //hooked
 
-sbit Mmc_Chip_Select at LATE0_bit;
-sbit Mmc_Chip_Select_Direction at TRISE0_bit;
-
-unsigned short initSDCard();
 void initR(void);
 void writecommand(unsigned char c);
 void writedata(unsigned char c);
@@ -23,40 +20,17 @@ char madctl;
 //Initalize the LCD
 unsigned short ST7735R_Init(){
 
-     unsigned short SDInit;
-
-     //set pins to output
-     //SCK2
-     TRISG.RG6 = 0; //hooked
-     //SS2
-     TRISD.RD0 = 0;  //hooked
-     //SDO2
-     TRISG.RG8 = 0; //hooked
-     //RESET
-     TRISE.RE3 = 0; //hooked
-     //D/C
-     TRISB.RB15 = 0; //hooked
-
-     //SPI3_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 2, _SPI_SS_ENABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_IDLE_2_ACTIVE);
-     SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 64, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
-     //initialize SD Card
-     SDInit = initSDCard();
-     
-     writeShort(SDInit);
-     writeStr(" :initSDCard");
+     //SPI LCD CS set to output
+     TRISD.RD0 = 0;
      
      SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 8, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
      //initialize the LCD
      initR();
      //clear the LCD to black
      ST7735_fillScreen(RGB565(0,0,0));
-     
-     return SDInit;
 }
 
-unsigned short initSDCard(){
-     return Mmc_Fat_Init();
-}
+
 
 void initR(void) {
         LCD_RESET = 1;

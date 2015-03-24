@@ -1,15 +1,15 @@
 #include "__Net_Wireless_CC3000_PIC32.h"
 
 void startUART(){
-     UART2_Init(115200);
-     UART2_Write(0x0);
-     UART2_Write(0x1);
+     //UART2_Init(115200);
+     //UART2_Write(0x0);
+     //UART2_Write(0x1);
 }
 
 void writeStr(unsigned char string[]){
   if (string != 0){
-    UART2_Write_Text(string);
-    UART2_Write(0xD);
+    //UART2_Write_Text(string);
+    //UART2_Write(0xD);
   }
 }
 
@@ -19,8 +19,8 @@ void writeInt(int var){
 
      inttostr(var, str);
 
-     UART2_Write_Text(str);
-     UART2_Write(0xD);
+     //UART2_Write_Text(str);
+     //UART2_Write(0xD);
 }
 
 void writeShort(unsigned short var){
@@ -29,8 +29,8 @@ void writeShort(unsigned short var){
 
      shorttostr(var, str);
 
-     UART2_Write_Text(str);
-     UART2_Write(0xD);
+     //UART2_Write_Text(str);
+     //UART2_Write(0xD);
 }
 
 void writeLong(long int var){
@@ -39,15 +39,15 @@ void writeLong(long int var){
      
      LongtoStr(var, str);
      
-     UART2_Write_Text(str);
-     UART2_Write(0xD);
+     //UART2_Write_Text(str);
+     //UART2_Write(0xD);
 }
 
 void writeBytes(uint8_t bytes[], unsigned int numBytes){
      unsigned int i;
      
      for (i = 0; i < numBytes; i++){
-         UART2_Write(bytes[i]);
+         //UART2_Write(bytes[i]);
      }
 
 }

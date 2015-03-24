@@ -105,7 +105,7 @@ void WS2812b_init(){
      
      //init timer
      timerIterations = 0;
-     InitTimer2();
+     //InitTimer2();
      
      updateEnabled = TRUE;
 }
@@ -137,7 +137,9 @@ void WS2812b_setRampAmount(unsigned short time){
 }
 
 void WS2812b_WaitRampComplete(){
-    while (WS2812b_RampComplete() == 0){ }
+    while (WS2812b_RampComplete() == 0){ 
+          WS2812b_update();
+    }
 }
 
 void WS2812b_update(){
