@@ -27,11 +27,6 @@ void delayS(unsigned int S){
 
 void main() {
 
-  //set LCD backlight pin to output
-  TRISB.B6 = 0;
-  //set pin to 0
-  RB6_bit = 0;
-
   //init any devices
   TEngine_InitDevices();
 

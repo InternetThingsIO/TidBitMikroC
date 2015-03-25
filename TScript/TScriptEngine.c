@@ -50,7 +50,7 @@ char A2_ProcessScript(uint8_t *script){
     while (currPos != 0){
 
         pCommand = GetNextCommand();
-        
+
         if (currPos == 0)
             return 1;
         

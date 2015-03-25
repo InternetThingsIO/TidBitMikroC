@@ -26,15 +26,11 @@ void TAction_InitDevices(){
      TRISG.RG6 = 0; //hooked
      //SDO2
      TRISG.RG8 = 0; //hooked
-     //RESET
-     TRISE.RE3 = 0; //hooked
-     //D/C
-     TRISB.RB15 = 0; //hooked
 
      //init SD Card
      SDCard_init();
      //init LCD
-     //writeShort(ST7735R_Init());
+     ST7735R_Init();
      //init WS2812B
      WS2812b_init();
 }
@@ -50,10 +46,12 @@ void TAction_show_bmp(SingleCommand *pCommand){
     command = *pCommand;
 
     ST7735R_loadBitmapToLCD(command.Parameters[0]);
+    LATB.B7 = 1;
 }
 
 void TAction_clear_lcd(SingleCommand *pCommand){
     writeStr("Clearing LCD");
+    LATB.B7 = 0;
     ST7735_fillScreenRGB(0,0,0);
 }
 

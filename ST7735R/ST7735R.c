@@ -22,12 +22,29 @@ unsigned short ST7735R_Init(){
 
      //SPI LCD CS set to output
      TRISD.RD0 = 0;
+     //RESET
+     TRISE.RE3 = 0; //hooked
+     //D/C
+     TRISB.RB15 = 0; //hooked
      
+     //set LCD backlight pin to output
+     //TRISB.B6 = 0;
+     TRISB.B7 = 0;
+     //set pin to 0
+     //LATB.B6 = 1;
+     LATB.B7 = 0;
+
      SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 8, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
      //initialize the LCD
      initR();
      //clear the LCD to black
      ST7735_fillScreen(RGB565(0,0,0));
+     
+     //RB6_bit = 1;
+     ST7735R_loadBitmapToLCD("it.bmp");
+     //Delay_Ms(1000);
+     //RB6_bit = 0;
+
 }
 
 

@@ -138,7 +138,12 @@ void WS2812b_setRampAmount(unsigned short time){
 
 void WS2812b_WaitRampComplete(){
     while (WS2812b_RampComplete() == 0){ 
-          WS2812b_update();
+      timerIterations++;
+      //makes this execute ~20hz
+      if (WS2812b_RampComplete() == 0 && timerIterations > 40000){
+          WS2812b_Update();
+          timerIterations = 0;
+      }
     }
 }
 
