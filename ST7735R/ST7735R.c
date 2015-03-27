@@ -40,8 +40,11 @@ unsigned short ST7735R_Init(){
      //clear the LCD to black
      ST7735_fillScreen(RGB565(0,0,0));
      
-     while(1){
-     //RB6_bit = 1;
+     
+ST7735R_loadBitmapToLCD("it.bmp");
+     while(1){ }
+     
+/*//RB6_bit = 1;
      ST7735R_loadBitmapToLCD("0.bmp");
      ST7735R_loadBitmapToLCD("1.bmp");
      ST7735R_loadBitmapToLCD("2.bmp");
@@ -52,7 +55,7 @@ unsigned short ST7735R_Init(){
      ST7735R_loadBitmapToLCD("7.bmp");
      ST7735R_loadBitmapToLCD("8.bmp");
      ST7735R_loadBitmapToLCD("9.bmp");
-     }
+     }*/
 
 }
 
@@ -336,8 +339,8 @@ void writedata(unsigned char c)
 unsigned short ST7735R_loadBitmapToLCD(char filename[])
 {
 
-    #define LCD_WIDTH 160
-    #define LCD_HEIGHT 128
+    #define LCD_WIDTH 128
+    #define LCD_HEIGHT 160
 
     unsigned short red, green, blue;
     unsigned int color;
@@ -345,13 +348,13 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
     unsigned char byte0, byte1;
     unsigned char x = 0;
     unsigned char y = 0;
-    unsigned short xOffset, yOffset;
+    
     uint8_t tmp[100];
 
-    unsigned int bitmapWidth = 0;
-    unsigned int bitmapHeight = 0;
-    unsigned int headerSize = 0;
-    
+    int bitmapWidth = 0;
+    int bitmapHeight = 0;
+    int headerSize = 0;
+    int  xOffset, yOffset;
 
     unsigned long size;
     
@@ -396,15 +399,12 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
     //Mmc_Fat_Reset(&size);
     //for (x = 0; x < BMP_HEADER_SIZE; x++) { Mmc_Fat_Read(&byte0); }
     
-    xOffset = (LCD_WIDTH / 2) - (bitmapWidth /2);
-    yOffset = (LCD_HEIGHT / 2) - (bitmapHeight /2);
+    yOffset = 0;//(LCD_HEIGHT / 2) - (bitmapHeight /2);
+    xOffset = 0;//(LCD_WIDTH / 2) - (bitmapWidth /2);
     
-    writeInt(xOffset);
-    writeInt(yOffset);
-    x = 0;
-    y = -100;
-    setAddrWindow(x, y-bitmapHeight+1, x+bitmapWidth-1, y);
-    //setAddrWindow(0, bitmapHeight-1, bitmapWidth, 0);
+    //setAddrWindow(0, 0, 72-1, 88+1);
+    //setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset-bitmapHeight+1);
+    setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset-bitmapHeight+1);
 
     for (y = 0; y < bitmapHeight; y++){
         for (x = 0; x < bitmapWidth; x++){
@@ -430,120 +430,3 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
     return 1;
 
 }
-
-//------------ST7735_DrawBitmap------------
-// Displays a 16-bit color BMP image.  A bitmap file that is created
-// by a PC image processing program has a header and may be padded
-// with dummy columns so the data have four byte alignment.  This
-// function assumes that all of that has been stripped out, and the
-// array image[] has one 16-bit halfword for each pixel to be
-// displayed on the screen (encoded in reverse order, which is
-// standard for bitmap files).  An array can be created in this
-// format from a 24-bit-per-pixel .bmp file using the associated
-// converter program.
-// (x,y) is the screen location of the lower left corner of BMP image
-// Requires (11 + 2*w*h) bytes of transmission (assuming image fully on screen)
-// Input: x     horizontal position of the bottom left corner of the image, columns from the left edge
-//        y     vertical position of the bottom left corner of the image, rows from the top edge
-//        image pointer to a 16-bit color BMP image
-//        w     number of pixels wide
-//        h     number of pixels tall
-// Output: none
-// Must be less than or equal to 128 pixels wide by 160 pixels high
-unsigned short ST7735_DrawBitmapFast(char filename[]){
-
-  uint8_t _height = 160;
-  uint8_t _width = 128;
-  uint8_t tmp[100];
-
-  short skipC=0;                        // non-zero if columns need to be skipped due to clipping
-  short originalWidth;              // save this value; even if not all columns fit on the screen, the image is still this width in ROM
-  int i;
-
-   unsigned long size;
-   short w,h;
-   short x = 0;
-   short y = 0;
-
-    SPI_Set_Active(SPI2_Read, SPI2_Write);
-
-
-
-    writeStr("Check if file exists");
-    writeStr(filename);
-    if (Mmc_Fat_Exists(filename) == 0){
-        writeStr("File does not exist");
-        return 1;
-    }
-
-    if (Mmc_Fat_Assign(filename, 0) == 0)
-       return 1;
-    Mmc_Fat_Reset(&size);
-
-
-    //check if this is BM type BMP.  Retur 0 if it is not
-    Mmc_Fat_ReadN(tmp, 54);
-    if (tmp[0] != 'B' && tmp[1] != 'M')
-        return 0;
-
-    //get the header size
-    //headerSize = tmp[14] + (tmp[15] << 8) + (tmp[16] << 12) + (tmp[17] << 16);
-    w =  tmp[18] + (tmp[19] << 8) + (tmp[20] << 12) + (tmp[21] << 16);
-    h =  tmp[22] + (tmp[23] << 8) + (tmp[24] << 12) + (tmp[25] << 16);
-
-    originalWidth = w;
-    i = w*(h - 1);
-
-  if((x >= _width) || ((y - h + 1) >= _height) || ((x + w) <= 0) || (y < 0)){
-    return;                             // image is totally off the screen, do nothing
-  }
-  if((w > _width) || (h > _height)){    // image is too wide for the screen, do nothing
-    //***This isn't necessarily a fatal error, but it makes the
-    //following logic much more complicated, since you can have
-    //an image that exceeds multiple boundaries and needs to be
-    //clipped on more than one side.
-    return;
-  }
-  if((x + w - 1) >= _width){            // image exceeds right of screen
-    skipC = (x + w) - _width;           // skip cut off columns
-    w = _width - x;
-  }
-  if((y - h + 1) < 0){                  // image exceeds top of screen
-    i = i - (h - y - 1)*originalWidth;  // skip the last cut off rows
-    h = y + 1;
-  }
-  if(x < 0){                            // image exceeds left of screen
-    w = w + x;
-    skipC = -1*x;                       // skip cut off columns
-    i = i - x;                          // skip the first cut off columns
-    x = 0;
-  }
-  if(y >= _height){                     // image exceeds bottom of screen
-    h = h - (y - _height + 1);
-    y = _height - 1;
-  }
-
-  setAddrWindow(x, y-h+1, x+w-1, y);
-
-  for(y=0; y<h; y=y+1){
-    for(x=0; x<w; x=x+1){
-      
-      unsigned short red, green, blue;
-      unsigned int color;
-      Mmc_Fat_Read(&blue);
-      Mmc_Fat_Read(&green);
-      Mmc_Fat_Read(&red);
-
-      color = RGB565(red, green, blue);
-                                        // send the top 8 bits
-      writedata((unsigned char)(color >> 8));
-                                        // send the bottom 8 bits
-      writedata((unsigned char)color);
-      i = i + 1;                        // go to the next pixel
-    }
-    i = i + skipC;
-    i = i - 2*originalWidth;
-  }
-}
-
-//uint8_t* getHeader(short
