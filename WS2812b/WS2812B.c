@@ -37,8 +37,6 @@ unsigned short dBlue[LED_STRIP_LEN];
 
 unsigned short updateEnabled;
 
-unsigned long timerIterations;
-
 void sendColor(unsigned short this_color);
 void sendFrame();
 void rampColor(unsigned short saColor[], unsigned short sdColor[], unsigned short sRampAmount);
@@ -78,58 +76,53 @@ void WS2812b_init(){
          aBlue[i] = 0;
      }
 
-     /*
-     for (i=0; i<LED_STRIP_LEN; i++){
+
+/*for (i=0; i<LED_STRIP_LEN; i++){
          if (i%3 == 0)
             dRed[i] = 64;
          else
              dRed[i] = 0;
-             
+
          if ((i+1)%3 == 0)
             dGreen[i] = 64;
          else
              dGreen[i] = 0;
-        
+
          if ((i+2)%3 == 0)
            dBlue[i] = 64;
          else
            dBlue[i] = 0;
-         
+
          aRed[i] = 0;
          aGreen[i] = 0;
          aBlue[i] = 0;
-     }
-     */
+     }*/
      
      RAMP_AMOUNT = 1;
      
      //init timer
-     timerIterations = 0;
-     //InitTimer2();
+     InitTimer2();
      
      updateEnabled = TRUE;
 }
 
-void Timer2Interrupt() iv IVT_TIMER_2 ilevel 7 ics ICS_SRS {
-    T2IF_bit = 0;
-    timerIterations++;
-    //makes this execute ~20hz
-    if (WS2812b_RampComplete() == 0 && timerIterations > 13){
-        WS2812b_Update();
-        timerIterations = 0;
-    }
+void Timer2Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
+    T1IF_bit = 0;
+
+    WS2812b_Update();
+
 }
 
 // Init 1ms timer interrupt.
 void InitTimer2(){
-  T2CON         = 0x8030;
-  T2IE_bit         = 1;
-  T2IF_bit         = 0;
-  T2IP0_bit         = 1;
-  T2IP1_bit         = 1;
-  T2IP2_bit         = 1;
-  PR2                 = 10000;
-  TMR2                 = 0;
+  T1CON         = 0x8030;
+  T1IE_bit         = 1;
+  T1IF_bit         = 0;
+  T1IP0_bit         = 1;
+  T1IP1_bit         = 1;
+  T1IP2_bit         = 1;
+  PR1                 = 13000;
+  TMR1                 = 0;
 }
 
 void WS2812b_setRampAmount(unsigned short time){
@@ -137,14 +130,8 @@ void WS2812b_setRampAmount(unsigned short time){
 }
 
 void WS2812b_WaitRampComplete(){
-    while (WS2812b_RampComplete() == 0){ 
-      timerIterations++;
-      //makes this execute ~20hz
-      if (WS2812b_RampComplete() == 0 && timerIterations > 40000){
-          WS2812b_Update();
-          timerIterations = 0;
-      }
-    }
+    while (WS2812b_RampComplete() == 0){}
+
 }
 
 void WS2812b_update(){
