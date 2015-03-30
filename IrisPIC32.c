@@ -4,7 +4,7 @@
 #include "SDCard.h"
 #include "WS2812b.h"
 
-#define FILE_BODY_LENGTH 1000
+#define FILE_BODY_LENGTH 5000
 
 static uint8_t fileBody[FILE_BODY_LENGTH];
 
