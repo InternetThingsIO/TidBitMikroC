@@ -33,9 +33,18 @@ void TAction_InitDevices(){
      ST7735R_Init();
      //init WS2812B
      WS2812b_init();
+     
+     //so that our timers run
+     EnableInterrupts();
 }
 
 void TAction_empty(SingleCommand *pCommand){
+
+
+}
+
+void TAction_animate_bmp(SingleCommand *pCommand){
+
 
 
 }
