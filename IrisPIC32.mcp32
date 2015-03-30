@@ -6,7 +6,7 @@ Value=-1
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=ST7735R\ST7735R.c
+Value=TScript\TScriptEngine.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -33,11 +33,16 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=4
+Count=9
 File0=IrisPIC32.c
 File1=IrisHub.c
 File2=ST7735R\ST7735R.c
 File3=ST7735R\ST7735R.h
+File4=TScript\TScriptEngine.c
+File5=SDCard.c
+File6=WS2812b\WS2812B.c
+File7=TScript\TScriptActions.c
+File8=TScript\TScriptActions.h
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
