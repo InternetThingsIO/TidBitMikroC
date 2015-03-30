@@ -10,10 +10,14 @@
 #define LCD_RS      LATB.RB15 //hooked to DC
 #define SD_CS       LATE.RE0 //hooked
 
+#define MAX_FILE_NAME_LENGTH 50
+
 void initR(void);
 void writecommand(unsigned char c);
 void writedata(unsigned char c);
 void setAddrWindow(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1);
+uint8_t *getIndexFileName(long index);
+unsigned short ST7735R_loadBitmapToLCDOld(char filename[]);
 
 char madctl;
 
@@ -28,10 +32,10 @@ unsigned short ST7735R_Init(){
      TRISB.RB15 = 0; //hooked
      
      //set LCD backlight pin to output
-     //TRISB.B6 = 0;
+     TRISB.B6 = 0;
      TRISB.B7 = 0;
      //set pin to 0
-     //LATB.B6 = 1;
+     LATB.B6 = 1;
      LATB.B7 = 0;
 
      SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 4, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
@@ -39,22 +43,14 @@ unsigned short ST7735R_Init(){
      initR();
      //clear the LCD to black
      ST7735_fillScreen(RGB565(0,0,0));
-     
-     
-ST7735R_loadBitmapToLCD("it.bmp");
-     while(1){ }
-     
-/*//RB6_bit = 1;
-     ST7735R_loadBitmapToLCD("0.bmp");
-     ST7735R_loadBitmapToLCD("1.bmp");
-     ST7735R_loadBitmapToLCD("2.bmp");
-     ST7735R_loadBitmapToLCD("3.bmp");
-     ST7735R_loadBitmapToLCD("4.bmp");
-     ST7735R_loadBitmapToLCD("5.bmp");
-     ST7735R_loadBitmapToLCD("6.bmp");
-     ST7735R_loadBitmapToLCD("7.bmp");
-     ST7735R_loadBitmapToLCD("8.bmp");
-     ST7735R_loadBitmapToLCD("9.bmp");
+     //ST7735R_loadBitmapToLCD("insta.bmp");
+/*while(1){
+       //ST7735R_loadBitmapSequence("shadow");
+       //ST7735_fillScreen(RGB565(0,0,0));
+       ST7735R_loadBitmapSequence("water");
+       ST7735_fillScreen(RGB565(0,0,0));
+       ST7735R_loadBitmapSequence("david");
+       ST7735_fillScreen(RGB565(0,0,0));
      }*/
 
 }
@@ -135,7 +131,8 @@ void initR(void) {
         // madctl = 0xC8;
 
         // normal R G B order
-        madctl = 0xC0;
+        //MY MX MV ML RGB MH - -
+        madctl = 0b00100000;
         writedata(madctl);  // row address/col address, bottom to top refresh
 
         writecommand(ST7735_COLMOD);  // set color mode
@@ -336,30 +333,223 @@ void writedata(unsigned char c)
         LCD_CS = 1;
 }
 
+uint8_t *getIndexFileName(long index){
+  static uint8_t fileName[MAX_FILE_NAME_LENGTH];
+  uint8_t i;
+  uint8_t *ptrFileName;
+    //clear out filename
+  memset(fileName, '\0', MAX_FILE_NAME_LENGTH);
+
+  LongToStr(index, fileName);
+  strcat(fileName, ".bmp");
+  ptrFileName = &fileName;
+  
+  while (ptrFileName[0] == 32){
+    ptrFileName += 1;
+  }
+
+  return ptrFilename;
+
+}
+
+unsigned short ST7735R_loadBitmapSequence(char foldername[]){
+
+  unsigned short red, green, blue;
+  unsigned int color;
+
+  unsigned char byte0, byte1;
+  unsigned char x,y,z;
+
+  uint8_t tmp[100];
+
+  int bitmapWidth = 0;
+  int bitmapHeight = 0;
+  int headerSize = 0;
+  int  xOffset, yOffset;
+
+  unsigned long size;
+  long numFrames = 0;
+
+  SPI_Set_Active(SPI2_Read, SPI2_Write);
+
+  Mmc_Fat_ChangeDir("\\");
+  if (Mmc_Fat_ChangeDir(foldername) != 0)
+     return 0;
+  
+  //count how many frames we have
+  while (Mmc_Fat_Exists(getIndexFileName(numFrames+1)) == 1){
+        numFrames++;
+  }
+  
+  //if we found no frames
+  if (numFrames == 0)
+     return 0;
+
+  //try to get info for the first frame
+  if (Mmc_Fat_Assign("1.bmp", 0) == 0)
+     return 1;
+
+  Mmc_Fat_Reset(&size);
+
+
+  //check if this is BM type BMP.  Retur 0 if it is not
+  Mmc_Fat_ReadN(tmp, 54);
+  if (tmp[0] != 'B' && tmp[1] != 'M')
+      return 0;
+
+  //get the header size
+
+  headerSize = tmp[14] + (tmp[15] << 8) + (tmp[16] << 12) + (tmp[17] << 16);
+  writeInt(headerSize);
+
+  bitmapWidth =  tmp[18] + (tmp[19] << 8) + (tmp[20] << 12) + (tmp[21] << 16);
+  writeInt(bitmapWidth);
+  bitmapHeight =  tmp[22] + (tmp[23] << 8) + (tmp[24] << 12) + (tmp[25] << 16);
+  writeInt(bitmapHeight);
+
+  xOffset = (SCREEN_WIDTH / 2) - (bitmapWidth /2);
+  yOffset = (SCREEN_HEIGHT / 2) - (bitmapHeight /2);
+
+
+
+  //loop through all frames
+  for (z = 1; z < numFrames; z++){
+
+    //reset to new file
+    //try to get info for the first frame
+    if (Mmc_Fat_Assign(getIndexFileName(z), 0) == 0)
+       return 1;
+
+    Mmc_Fat_Reset(&size);
+
+    //read to BMP data
+    Mmc_Fat_ReadN(tmp, 54);
+    
+    setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset-bitmapHeight+1);
+
+    for (y = 0; y < bitmapHeight; y++){
+        for (x = 0; x < bitmapWidth; x++){
+
+            Mmc_Fat_Read(&blue);
+            Mmc_Fat_Read(&green);
+            Mmc_Fat_Read(&red);
+
+            color = RGB565(red, green, blue);
+
+            //writedata(color >> 8);
+            //writedata(color);
+            LCD_RS = 1;
+            LCD_CS = 0;
+            SPI2_write(color >> 8);
+            SPI2_write(color);
+            LCD_CS = 1;
+        }
+    }
+  }
+
+  return 1;
+
+}
+
+
 unsigned short ST7735R_loadBitmapToLCD(char filename[])
 {
 
-    #define LCD_WIDTH 128
-    #define LCD_HEIGHT 160
+  unsigned short red, green, blue;
+  unsigned int color;
 
-    unsigned short red, green, blue;
-    unsigned int color;
+  unsigned char byte0, byte1;
+  unsigned char x = 0;
+  unsigned char y = 0;
+
+  uint8_t tmp[100];
+
+  int bitmapWidth = 0;
+  int bitmapHeight = 0;
+  int headerSize = 0;
+  int  xOffset, yOffset;
+
+  unsigned long size;
+
+  SPI_Set_Active(SPI2_Read, SPI2_Write);
+
+  if (Mmc_Fat_Exists(filename) == 0){
+
+      return 1;
+  }
+
+  if (Mmc_Fat_Assign(filename, 0) == 0)
+     return 1;
+
+  Mmc_Fat_Reset(&size);
+
+
+  //check if this is BM type BMP.  Retur 0 if it is not
+  Mmc_Fat_ReadN(tmp, 54);
+  if (tmp[0] != 'B' && tmp[1] != 'M')
+      return 0;
+
+  //get the header size
+
+  headerSize = tmp[14] + (tmp[15] << 8) + (tmp[16] << 12) + (tmp[17] << 16);
+  writeInt(headerSize);
+
+  bitmapWidth =  tmp[18] + (tmp[19] << 8) + (tmp[20] << 12) + (tmp[21] << 16);
+  writeInt(bitmapWidth);
+  bitmapHeight =  tmp[22] + (tmp[23] << 8) + (tmp[24] << 12) + (tmp[25] << 16);
+  writeInt(bitmapHeight);
+
+  xOffset = (SCREEN_WIDTH / 2) - (bitmapWidth /2);
+  yOffset = (SCREEN_HEIGHT / 2) - (bitmapHeight /2);
+
+  setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset+bitmapHeight+1);
+
+  for (y = 0; y < bitmapHeight; y++){
+      for (x = 0; x < bitmapWidth; x++){
+
+          Mmc_Fat_Read(&blue);
+          Mmc_Fat_Read(&green);
+          Mmc_Fat_Read(&red);
+
+          color = RGB565(red, green, blue);
+
+          //writedata(color >> 8);
+          //writedata(color);
+          LCD_RS = 1;
+          LCD_CS = 0;
+          SPI2_write(color >> 8);
+          SPI2_write(color);
+          LCD_CS = 1;
+          //ST7735_drawPixel(bitmapHeight - y-1 + yOffset, bitmapWidth - x-1 + xOffset, color);
+          //ST7735_drawPixel(bitmapHeight - x-1 + xOffset, bitmapWidth - y-1 + yOffset, color);
+      }
+  }
+
+  return 1;
+
+}
+
+unsigned short ST7735R_loadBitmapToLCDOld(char filename[])
+{
+
+    #define LCD_WIDTH 160
+    #define LCD_HEIGHT 128
 
     unsigned char byte0, byte1;
     unsigned char x = 0;
     unsigned char y = 0;
-    
+    unsigned short xOffset, yOffset;
     uint8_t tmp[100];
 
-    int bitmapWidth = 0;
-    int bitmapHeight = 0;
-    int headerSize = 0;
-    int  xOffset, yOffset;
+    unsigned int bitmapWidth = 0;
+    unsigned int bitmapHeight = 0;
+    unsigned int headerSize = 0;
+
 
     unsigned long size;
-    
+
     SPI_Set_Active(SPI2_Read, SPI2_Write);
-    
+
 
 
     writeStr("Check if file exists");
@@ -369,16 +559,16 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
         return 1;
     }
     writeStr("File exists");
-    
+
 
     writeStr("Assign file to SD");
 
     if (Mmc_Fat_Assign(filename, 0) == 0)
        return 1;
-    
+
     writeStr("Fat_Reset");
     Mmc_Fat_Reset(&size);
-    
+
 
     //check if this is BM type BMP.  Retur 0 if it is not
     Mmc_Fat_ReadN(tmp, 54);
@@ -394,35 +584,27 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
     writeInt(bitmapWidth);
     bitmapHeight =  tmp[22] + (tmp[23] << 8) + (tmp[24] << 12) + (tmp[25] << 16);
     writeInt(bitmapHeight);
-    
+
     //writeStr("Fat_Reset");
     //Mmc_Fat_Reset(&size);
     //for (x = 0; x < BMP_HEADER_SIZE; x++) { Mmc_Fat_Read(&byte0); }
-    
-    yOffset = 0;//(LCD_HEIGHT / 2) - (bitmapHeight /2);
-    xOffset = 0;//(LCD_WIDTH / 2) - (bitmapWidth /2);
-    
-    //setAddrWindow(0, 0, 72-1, 88+1);
-    //setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset-bitmapHeight+1);
-    setAddrWindow(xOffset, yOffset, xOffset+bitmapWidth-1, yOffset-bitmapHeight+1);
+
+    xOffset = (LCD_WIDTH / 2) - (bitmapWidth /2);
+    yOffset = (LCD_HEIGHT / 2) - (bitmapHeight /2);
+
+    writeInt(xOffset);
+    writeInt(yOffset);
 
     for (y = 0; y < bitmapHeight; y++){
         for (x = 0; x < bitmapWidth; x++){
-
+            unsigned short red, green, blue;
+            unsigned int color;
             Mmc_Fat_Read(&blue);
             Mmc_Fat_Read(&green);
             Mmc_Fat_Read(&red);
-        
+
             color = RGB565(red, green, blue);
-            
-            //writedata(color >> 8);
-            //writedata(color);
-            LCD_RS = 1;
-            LCD_CS = 0;
-            SPI2_write(color >> 8);
-            SPI2_write(color);
-            LCD_CS = 1;
-            //ST7735_drawPixel(bitmapHeight - y-1 + yOffset, bitmapWidth - x-1 + xOffset, color);
+            ST7735_drawPixel(bitmapHeight - y-1 + yOffset, bitmapWidth - x-1 + xOffset, color);
             //ST7735_drawPixel(bitmapHeight - x-1 + xOffset, bitmapWidth - y-1 + yOffset, color);
         }
     }

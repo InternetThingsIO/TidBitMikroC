@@ -3,8 +3,8 @@
 #define swap(a, b) { int t = a; a = b; b = t; }
 
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 160
+#define SCREEN_WIDTH 160
+#define SCREEN_HEIGHT 128
 
 
 #define ST7735_NOP 0x0
@@ -64,3 +64,4 @@ void ST7735_drawPixel(unsigned char x, unsigned char y, unsigned int color);
 void ST7735_fillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color);
 unsigned short ST7735R_loadBitmapToLCD(char filename[]);
 void ST7735_fillScreenRGB(uint8_t R, uint8_t G, uint8_t B);
+unsigned short ST7735R_loadBitmapSequence(char foldername[]);
