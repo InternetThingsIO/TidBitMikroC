@@ -29,6 +29,9 @@ void main() {
 
   //init any devices
   TEngine_InitDevices();
+  
+  WS2812b_WaitRampComplete();
+  delay_ms(1000);
 
 /*while(1){
        SDCard_test();

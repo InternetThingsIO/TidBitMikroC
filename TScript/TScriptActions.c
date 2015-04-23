@@ -27,15 +27,17 @@ void TAction_InitDevices(){
      //SDO2
      TRISG.RG8 = 0; //hooked
 
+     //so that our timers run
+     EnableInterrupts();
+
+     //init WS2812B
+     WS2812b_init();
+
      //init SD Card
      SDCard_init();
      //init LCD
      ST7735R_Init();
-     //init WS2812B
-     WS2812b_init();
-     
-     //so that our timers run
-     EnableInterrupts();
+
 }
 
 void TAction_empty(SingleCommand *pCommand){

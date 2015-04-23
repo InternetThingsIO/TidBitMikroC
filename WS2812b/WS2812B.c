@@ -104,6 +104,11 @@ void WS2812b_init(){
      InitTimer2();
      
      updateEnabled = TRUE;
+     
+     //loop infinitely
+     //while(1){WS2812b_Update(); delay_ms(15);}
+     
+     WS2812B_setColor(0, 32,32,32);
 }
 
 void Timer2Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
