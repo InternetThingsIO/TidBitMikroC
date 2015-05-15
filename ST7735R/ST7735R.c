@@ -29,6 +29,9 @@ int bitmapHeight = 0;
 int headerSize = 0;
 int xOffset, yOffset;
 unsigned long startAddress;
+int pixelsWritten = 40000;
+uint8_t ired, igreen, iblue;
+unsigned int color, i;
 
 //Initalize the LCD
 unsigned short ST7735R_Init(){
@@ -68,7 +71,7 @@ unsigned short ST7735R_Init(){
        //ST7735R_loadBitmapSequence("david");
        //ST7735_fillScreen(RGB565(0,0,0));
      }*/
-     
+
      return 1;
 
 }
@@ -398,7 +401,7 @@ void setImageDetails(char filename[]){
   bitmapHeight =  tmp[22] + (tmp[23] << 8) + (tmp[24] << 12) + (tmp[25] << 16);
 
   //offsets so that the image is centered on the screen
-  xOffset = (SCREEN_WIDTH / 2) - (bitmapWidth /2);
+  xOffset = (SCREEN_WIDTH / 2) - (bitmapWidth /2)-10;
   yOffset = (SCREEN_HEIGHT / 2) - (bitmapHeight /2);
 
   //the number of pixels we should write out
@@ -420,7 +423,7 @@ void writeFrame(){
     Mmc_Fat_Read(&blue);
     Mmc_Fat_Read(&green);
     Mmc_Fat_Read(&red);
-    
+
     color = RGB565(red, green, blue);
 
     LCD_RS = 1;
@@ -428,13 +431,53 @@ void writeFrame(){
 
     SPI2_write(color >> 8);
     SPI2_write(color);
-    
+
     LCD_CS = 1;
 
   }
   
 
 }
+
+void ST7735R_Update(){
+
+  int i;
+
+  for (i = 0; i<40; i++){
+  
+    pixelsWritten++;
+
+    if (pixelsWritten > ImagePixels){
+     pixelsWritten = 40000;
+     delay_us(500);
+     return;
+    }
+  
+    Mmc_Fat_Read(&iblue);
+    Mmc_Fat_Read(&igreen);
+    Mmc_Fat_Read(&ired);
+
+    color = RGB565(ired, igreen, iblue);
+
+    LCD_RS = 1;
+    LCD_CS = 0;
+
+    SPI2_write(color >> 8);
+    SPI2_write(color);
+
+    LCD_CS = 1;
+  
+  }
+
+}
+
+uint8_t ST7735R_ImageFinished(){
+ if (pixelsWritten > ImagePixels)
+    return 1;
+ else
+    return 0;
+}
+
 
 unsigned short ST7735R_loadBitmapSequence(char foldername[]){
 
@@ -487,8 +530,9 @@ unsigned short ST7735R_loadBitmapToLCD(char filename[])
 
   setImageDetails(filename);
 
-  writeFrame();
-
+  //writeFrame();
+  pixelsWritten = 0;
+  
   return 1;
 
 }
@@ -553,7 +597,7 @@ unsigned short ST7735R_loadBitmapToLCDOld(char filename[])
     //Mmc_Fat_Reset(&size);
     //for (x = 0; x < BMP_HEADER_SIZE; x++) { Mmc_Fat_Read(&byte0); }
 
-    xOffset = (LCD_WIDTH / 2) - (bitmapWidth /2);
+    xOffset = (LCD_WIDTH / 2) - (bitmapWidth /2)-10;
     yOffset = (LCD_HEIGHT / 2) - (bitmapHeight /2);
 
     writeInt(xOffset);

@@ -6,7 +6,7 @@ Value=-1
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=ST7735R\ST7735R.c
+Value=IrisPIC32.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -36,14 +36,14 @@ ActiveImageIndex=-1
 Count=10
 File0=IrisPIC32.c
 File1=IrisHub.c
-File2=ST7735R\ST7735R.h
-File3=TScript\TScriptEngine.c
-File4=WS2812b\WS2812B.c
-File5=TScript\TScriptActions.c
-File6=TScript\TScriptActions.h
-File7=SDCard.c
-File8=IrisPIC32.lst
-File9=ST7735R\ST7735R.c
+File2=TScript\TScriptActions.c
+File3=TScript\TScriptActions.h
+File4=ST7735R\ST7735R.c
+File5=..\..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC32\defs\P32MX534F064H.c
+File6=SDCard.c
+File7=ST7735R\ST7735R.h
+File8=TScript\TScriptEngine.c
+File9=WS2812b\WS2812B.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]

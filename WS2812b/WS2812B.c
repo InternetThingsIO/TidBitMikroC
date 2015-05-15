@@ -35,7 +35,7 @@ unsigned short dRed[LED_STRIP_LEN];
 unsigned short dGreen[LED_STRIP_LEN];
 unsigned short dBlue[LED_STRIP_LEN];
 
-unsigned short updateEnabled;
+unsigned short updateEnabled = FALSE;
 
 void sendColor(unsigned short this_color);
 void sendFrame();
@@ -50,8 +50,6 @@ void rotate(uint8_t array[], uint8_t size, uint8_t amt);
 
 void write1();
 void write0();
-void InitTimer2();
-void Timer2Interrupt();
 
 void WS2812b_init(){
 
@@ -67,9 +65,9 @@ void WS2812b_init(){
      //SPI_Set_Active(SPI2_Read, SPI2_Write);
 
      for (i=0; i<LED_STRIP_LEN; i++){
-         dRed[i] = 0;
-         dGreen[i] = 0;
-         dBlue[i] = 0;
+         dRed[i] = 32;
+         dGreen[i] = 32;
+         dBlue[i] = 32;
          
          aRed[i] = 0;
          aGreen[i] = 0;
@@ -100,34 +98,12 @@ void WS2812b_init(){
      
      RAMP_AMOUNT = 1;
      
-     //init timer
-     InitTimer2();
-     
      updateEnabled = TRUE;
      
      //loop infinitely
      //while(1){WS2812b_Update(); delay_ms(15);}
      
      WS2812B_setColor(0, 32,32,32);
-}
-
-void Timer2Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
-    T1IF_bit = 0;
-
-    WS2812b_Update();
-
-}
-
-// Init 1ms timer interrupt.
-void InitTimer2(){
-  T1CON         = 0x8030;
-  T1IE_bit         = 1;
-  T1IF_bit         = 0;
-  T1IP0_bit         = 1;
-  T1IP1_bit         = 1;
-  T1IP2_bit         = 1;
-  PR1                 = 13000;
-  TMR1                 = 0;
 }
 
 void WS2812b_setRampAmount(unsigned short time){
@@ -236,7 +212,7 @@ void WS2812b_rotate(int positions){
 }
 
 void WS2812b_rotate_range(uint8_t start, uint8_t end, int positions){
-
+    
     uint8_t red[LED_STRIP_LEN];
     uint8_t green[LED_STRIP_LEN];
     uint8_t blue[LED_STRIP_LEN];

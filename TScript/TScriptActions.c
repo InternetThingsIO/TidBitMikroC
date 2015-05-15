@@ -17,6 +17,11 @@ const uint8_t BLUE = 2;
 uint8_t *getRGB(uint8_t *ptrLine);
 void ddelay_ms(unsigned int time);
 
+void InitTimer1();
+void Timer1Interrupt();
+
+int LEDCounter = 0;
+
 //must be called first
 //initializes any devices available for the action scripts
 void TAction_InitDevices(){
@@ -30,6 +35,9 @@ void TAction_InitDevices(){
      //so that our timers run
      EnableInterrupts();
 
+     //start timer so it will run
+     InitTimer1();
+
      //init WS2812B
      WS2812b_init();
 
@@ -37,7 +45,36 @@ void TAction_InitDevices(){
      SDCard_init();
      //init LCD
      ST7735R_Init();
+     
+     while (ST7735R_ImageFinished() == 0){}
 
+}
+
+void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
+
+    LEDCounter++;
+    
+    if (LEDCounter > 50){
+       WS2812b_Update();
+       LEDCounter = 0;
+    }
+    
+    ST7735R_Update();
+
+    T1IF_bit = 0;
+
+}
+
+// Init 1ms timer interrupt.
+void InitTimer1(){
+  T1CON         = 0x8030;
+  T1IE_bit         = 1;
+  T1IF_bit         = 0;
+  T1IP0_bit         = 1;
+  T1IP1_bit         = 1;
+  T1IP2_bit         = 1;
+  PR1                 = 200;
+  TMR1                 = 0;
 }
 
 void TAction_empty(SingleCommand *pCommand){
@@ -73,10 +110,10 @@ void TAction_delay_ms(SingleCommand *pCommand){
     
     command = *pCommand;
     delay = atoi(command.Parameters[0]);
-    delay /= 10;
+    delay /= 5;
 
     for (i = 0; i < delay; i++)
-        delay_ms(10);
+        delay_ms(5);
 }
 
 //wait for LED to finish ramping
