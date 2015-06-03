@@ -19,8 +19,12 @@ void ddelay_ms(unsigned int time);
 
 void InitTimer1();
 void Timer1Interrupt();
+void showInitStatus();
+void delayS(unsigned int S);
 
 int LEDCounter = 0;
+
+uint8_t SDCardStatus = 255;
 
 //must be called first
 //initializes any devices available for the action scripts
@@ -42,12 +46,58 @@ void TAction_InitDevices(){
      WS2812b_init();
 
      //init SD Card
-     SDCard_init();
+     SDCardStatus = SDCard_init();
      //init LCD
      ST7735R_Init();
      
      while (ST7735R_ImageFinished() == 0){}
+     
+     showInitStatus();
 
+}
+
+void showInitStatus(){
+
+  uint8_t fileTestResult;
+
+  //show SDCard status
+  if (SDCardStatus == 255)
+    WS2812B_setColor(1, 32,0,0);
+  else if(SDCardStatus == 1)
+    WS2812B_setColor(1, 32,32,0);
+  else if (SDCardStatus == 0)
+    WS2812B_setColor(1, 0,32,0);
+    
+  //check if we can access file itred.txt
+  fileTestResult = SDCard_fileTest();
+  
+  if (fileTestResult == 0)
+    WS2812B_setColor(2, 32,0,0);
+  else if(fileTestResult == 2)
+    WS2812B_setColor(2, 32,32,0);
+  else if (fileTestResult == 1)
+    WS2812B_setColor(2, 0,32,0);
+
+  //wait 1s
+  delayS(1);
+  
+  TAction_ClearDisplay();
+  
+}
+
+void TAction_ClearDisplay(){
+
+  WS2812b_setRampAmount(20);
+
+  //clear LED Ring
+  WS2812b_setColorRange(0,35,0,0,0);
+
+  WS2812b_WaitRampComplete();
+  
+  //clear LCD
+  LATB.B7 = 0;
+  ST7735_fillScreenRGB(0,0,0);
+  
 }
 
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
@@ -77,15 +127,27 @@ void InitTimer1(){
   TMR1                 = 0;
 }
 
-void TAction_empty(SingleCommand *pCommand){
+void TAction_empty(SingleCommand *pCommand){}
+
+void TAction_animate_bmp(SingleCommand *pCommand){
+    SingleCommand command;
+
+    command = *pCommand;
+    
+     ST7735R_loadBitmapSequence(command.Parameters[0]);
 
 
 }
 
-void TAction_animate_bmp(SingleCommand *pCommand){
+void TAction_rotateColor(SingleCommand *pCommand){
+    int color, positions;
+    SingleCommand command;
 
+    command = *pCommand;
+    color = atoi(command.Parameters[1]);
+    positions = atoi(command.Parameters[0]);
 
-
+    WS2812b_rotateColor(positions, color);
 }
 
 void TAction_show_bmp(SingleCommand *pCommand){

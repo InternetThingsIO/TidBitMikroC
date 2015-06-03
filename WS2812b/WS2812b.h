@@ -9,3 +9,4 @@ void WS2812b_setRampAmount(unsigned short time);
 void WS2812b_WaitRampComplete();
 void WS2812b_rotate(int positions);
 void WS2812b_rotate_range(uint8_t start, uint8_t end, int positions);
+void WS2812b_rotateColor(int positions, uint8_t color);

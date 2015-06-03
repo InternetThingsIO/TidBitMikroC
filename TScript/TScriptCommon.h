@@ -5,10 +5,12 @@
 #define MAX_PARAMETER_LENGTH 20
 #define MAX_REPEAT_COMMANDS 10
 #define MAX_LINE_LENGTH 50
-#define NUM_AVAILABLE_COMMANDS 11
+#define NUM_AVAILABLE_COMMANDS 12
 
 #define TRUE 1
 #define FALSE 0
+
+void TAction_ClearDisplay();
 
 typedef struct{
     uint8_t Name[MAX_COMMAND_LENGTH]; //name of the command

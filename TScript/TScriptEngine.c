@@ -31,7 +31,8 @@ const CommandDef availableCommands[NUM_AVAILABLE_COMMANDS] = {
                                     {"led_set",           2, &TAction_led_set},
                                     {"show_bmp",          1, &TAction_show_bmp},
                                     {"clear_lcd",         0, &TAction_clear_lcd},
-                                    {"animate_bmp",       1, &TAction_animate_bmp}
+                                    {"animate_bmp",       1, &TAction_animate_bmp},
+                                    {"led_rotate_color",  2, &TAction_rotateColor}
                                   };
                                   
 //holds the pointer to the current position in the script

@@ -16,8 +16,8 @@
 #define FALSE 0
 
 #define RED 0
-#define GREEN 0
-#define BLUE 0
+#define GREEN 1
+#define BLUE 2
 
 //Must always be positive and between 0-255
 //#define RAMP_AMOUNT 1
@@ -99,9 +99,6 @@ void WS2812b_init(){
      RAMP_AMOUNT = 1;
      
      updateEnabled = TRUE;
-     
-     //loop infinitely
-     //while(1){WS2812b_Update(); delay_ms(15);}
      
      WS2812B_setColor(0, 32,32,32);
 }
@@ -208,6 +205,26 @@ void WS2812b_rotate(int positions){
     memcpy(dRed, red, LED_STRIP_LEN);
     memcpy(dGreen, green, LED_STRIP_LEN);
     memcpy(dBlue, blue, LED_STRIP_LEN);
+
+}
+
+void WS2812b_rotateColor(int positions, uint8_t color){
+
+    uint8_t tmp[LED_STRIP_LEN];
+
+    if (color == RED){
+      memcpy(tmp, dRed, LED_STRIP_LEN);
+      rotate(tmp, LED_STRIP_LEN, positions);
+      memcpy(dRed, tmp, LED_STRIP_LEN);
+    }else if (color == BLUE){
+      memcpy(tmp, dBlue, LED_STRIP_LEN);
+      rotate(tmp, LED_STRIP_LEN, positions);
+      memcpy(dBlue, tmp, LED_STRIP_LEN);
+    }else if (color == GREEN){
+      memcpy(tmp, dGreen, LED_STRIP_LEN);
+      rotate(tmp, LED_STRIP_LEN, positions);
+      memcpy(dGreen, tmp, LED_STRIP_LEN);
+    }
 
 }
 

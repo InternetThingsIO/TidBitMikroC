@@ -12,3 +12,4 @@ void TAction_led_set(SingleCommand *pCommand);
 void TAction_show_bmp(SingleCommand *pCommand);
 void TAction_clear_lcd(SingleCommand *pCommand);
 void TAction_animate_bmp(SingleCommand *pCommand);
+void TAction_rotateColor(SingleCommand *pCommand);

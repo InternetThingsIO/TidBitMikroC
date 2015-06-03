@@ -5,10 +5,10 @@
 //#include "SDCard.h"
 ////#include "MDD File System/SD-SPI.h"
 
-#define LCD_RESET   LATE.RE3 //hooked
-#define LCD_CS      LATD.RD0 //hooked
-#define LCD_RS      LATB.RB15 //hooked to DC
-#define SD_CS       LATE.RE0 //hooked
+#define LCD_RESET   LATE.RE3 //jasoned
+#define LCD_CS      LATD.RD0 //jasoned
+#define LCD_RS      LATB.RB15 //hooked to DC jasoned
+#define SD_CS       LATE.RE0 //jasoned
 
 #define MAX_FILE_NAME_LENGTH 50
 
@@ -48,15 +48,15 @@ unsigned short ST7735R_Init(){
      TRISB.B7 = 0;
      //set pin to 0
      LATB.B6 = 1;
-     LATB.B7 = 0;
+     LATB.B7 = 1;
 
-     SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 4, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
+     SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 7, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
      //SPI2_Init_Advanced(_SPI_MASTER, _SPI_8_BIT, 4, _SPI_SS_DISABLE, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_HIGH, _SPI_ACTIVE_2_IDLE);
      //initialize the LCD
      initR();
      //clear the LCD to black
      ST7735_fillScreen(RGB565(0,0,0));
-     ST7735R_loadBitmapToLCD("it.bmp");
+     ST7735R_loadBitmapToLCD("itred.bmp");
      //ST7735R_loadBitmapSequence("water");
 /*while(1){
        //ST7735R_loadBitmapToLCD("test2.bmp");
